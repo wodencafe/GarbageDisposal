@@ -17,7 +17,7 @@ dependencies {
 }
 ```
 
-For customizing and plating with the source for yourself, please see the **[Play with the source](#play-with-the-source)** section.
+For customizing and playing with the source for yourself, please see the **[Play with the source](#play-with-the-source)** section.
 
 ## Example of Use
 
