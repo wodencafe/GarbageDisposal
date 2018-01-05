@@ -3,13 +3,13 @@ package club.wodencafe.decorators;
 
 import java.lang.ref.PhantomReference;
 import java.lang.ref.ReferenceQueue;
-import java.util.HashSet;
 import java.util.Optional;
-import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import com.google.common.util.concurrent.AbstractExecutionThreadService;
 
 /**
@@ -26,12 +26,14 @@ public class GarbageDisposal
 	private static final GarbageDisposal gc = new GarbageDisposal();
 	private static final ExecutorService cachedExecutor = Executors.newCachedThreadPool();
 	private final ReferenceQueue<Object> q;
-	private final Set<Runnable> set;
+
+	private static final Cache<Object, PhantomRunnable<Object>> cache = CacheBuilder.newBuilder().weakKeys().build();
+
 	private final GarbageCollectorCloser service;
 
 	private GarbageDisposal()
 	{
-		set = new HashSet<>();
+
 		q = new ReferenceQueue<>();
 		service = new GarbageCollectorCloser();
 		service.startAsync();
@@ -54,9 +56,14 @@ public class GarbageDisposal
 
 	}
 
+	public static final <T> void undecorate(T object)
+	{
+		cache.invalidate(object);
+	}
+
 	public static final <T> void decorate(T object, Runnable runnable)
 	{
-		gc.set.add(new PhantomRunnable<>(object, runnable));
+		cache.put(object, new PhantomRunnable<>(object, runnable));
 	}
 
 	private static final class PhantomRunnable<T> extends PhantomReference<T> implements Runnable
@@ -86,7 +93,13 @@ public class GarbageDisposal
 		@Override
 		public void run()
 		{
-			gc.set.remove(this);
+			// Not Necessary if the keys are weak.
+			/*
+			 * Optional<Object> object =
+			 * cache.asMap().entrySet().stream().filter(x -> x.getValue() ==
+			 * this).map(x -> x.getKey()).findAny(); if (object.isPresent()) {
+			 * gc.set.remove(this); }
+			 */
 			CompletableFuture.runAsync(() -> runnable.run(), executor.get());
 		}
 
