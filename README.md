@@ -12,7 +12,7 @@ For immediate usage, please see the **Play with the source** section.
 
 ## Example of Use
 
-The standard usage pattern of [GarbageDisposal.java](src/main/java/club/wodencafe/decorators/GarbageDisposal.java) is to *decorate* an object and provide a **Runnable** callback, like so:
+The standard usage pattern of [GarbageDisposal.java](src/main/java/club/wodencafe/decorators/GarbageDisposal.java) is to [decorate()](src/main/java/club/wodencafe/decorators/GarbageDisposal.java#L57) an object and provide a [Runnable](https://docs.oracle.com/javase/9/docs/api/java/lang/Runnable.html) callback, like so:
 
 ```
 Object objectToWatch = new Object();
