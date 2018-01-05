@@ -8,7 +8,7 @@ Please see [here](https://stackoverflow.com/questions/2860121/why-do-finalizers-
 
 This project is in the process of being hosted on [Maven Central](https://search.maven.org/), when this is complete this artifact will be available and this section will be updated with the *Maven Coordinates*. 
 
-For immediate usage, please see the **Play with the source** section.
+For immediate usage, please see the **[Play with the source](#play-with-the-source)** section.
 
 ## Example of Use
 
