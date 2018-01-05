@@ -32,7 +32,8 @@ cd GarbageDisposal
 
 This will build the jar in:
 `./build/libs/GarbageDisposal.jar`
-You can then reference this jar yourself in your own projects.
+
+You can then reference this jar for your own projects.
 
 ## Built With
 
