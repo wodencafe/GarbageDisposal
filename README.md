@@ -8,8 +8,31 @@ Please see [here](https://stackoverflow.com/questions/2860121/why-do-finalizers-
 
 This project is in the process of being hosted on [Maven Central](https://search.maven.org/), when this is complete this artifact will be available and this section will be updated with the *Maven Coordinates*. 
 
-If you would like to start using this library in your own project, please add the following to your build.gradle dependencies:
+### Maven
+If you would like to start using this library in your [Maven](https://maven.apache.org/) projects, please add the following to your **pom.xml**:
+```
+<repositories>
+    <repository>
+        <id>jitpack.io</id>
+        <url>https://jitpack.io</url>
+    </repository>
+</repositories>
+```
+```
+<dependency>
+    <groupId>com.github.wodencafe</groupId>
+    <artifactId>GarbageDisposal</artifactId>
+    <version>master-SNAPSHOT</version>
+</dependency>
+```
 
+### Gradle
+If you would like to start using this library in your [Gradle](https://gradle.org/) projects, please add the following to your **build.gradle**:
+```
+    repositories {
+        maven { url "https://jitpack.io" 
+}
+```
 ```
 dependencies {
     // https://jitpack.io/#wodencafe/GarbageDisposal
