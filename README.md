@@ -19,6 +19,7 @@ If you would like to start using this library in your [Maven](https://maven.apac
 </repositories>
 ```
 ```
+<!-- https://jitpack.io/#wodencafe/GarbageDisposal -->
 <dependency>
     <groupId>com.github.wodencafe</groupId>
     <artifactId>GarbageDisposal</artifactId>
@@ -29,8 +30,8 @@ If you would like to start using this library in your [Maven](https://maven.apac
 ### Gradle
 If you would like to start using this library in your [Gradle](https://gradle.org/) projects, please add the following to your **build.gradle**:
 ```
-    repositories {
-        maven { url "https://jitpack.io" 
+repositories {
+    maven { url "https://jitpack.io" }
 }
 ```
 ```
