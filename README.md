@@ -1,6 +1,6 @@
 # GarbageDisposal
 
-**GarbageDisposal** is a library to register [callbacks](https://en.wikipedia.org/wiki/Callback_(computer_programming)) when an object is [Garbage Collected](https://www.cubrid.org/blog/understanding-java-garbage-collection), without incurring the [penalty](http://thefinestartist.com/effective-java/07) for implementing the [finalize](https://docs.oracle.com/javase/9/docs/api/java/lang/Object.html#finalize--) method. Also *finalize* is now **deprecated**.
+**GarbageDisposal** is a library to register [callbacks](https://en.wikipedia.org/wiki/Callback_(computer_programming)) when an object is [Garbage Collected](https://www.cubrid.org/blog/understanding-java-garbage-collection), without incurring the [penalty](http://thefinestartist.com/effective-java/07) for implementing the [finalize](https://docs.oracle.com/javase/9/docs/api/java/lang/Object.html#finalize--) method - which, by the way, is now **deprecated** as of Java 9.
 
 Please see [here](https://stackoverflow.com/questions/2860121/why-do-finalizers-have-a-severe-performance-penalty) and [here](https://docs.oracle.com/javase/9/docs/api/java/lang/Object.html#finalize--) for more details on why it is problematic to implement the *finalize* method directly.
 
