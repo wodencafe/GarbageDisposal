@@ -16,3 +16,6 @@ GarbageDisposal.decorate(objectToWatch, () -> System.out.println("Object was Gar
 ```
 
 This callback will be invoked when the JVM Garbage Collection cycle runs, and the object is [Phantom Reachable](https://docs.oracle.com/javase/7/docs/api/java/lang/ref/package-summary.html#reachability)
+
+License
+This project is licensed under the MIT License - see the LICENSE.md file for details
