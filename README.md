@@ -19,6 +19,15 @@ GarbageDisposal.decorate(objectToWatch, () -> System.out.println("Object was Gar
 
 This callback will be invoked when the JVM Garbage Collection cycle runs, and the object is [Phantom Reachable](https://docs.oracle.com/javase/7/docs/api/java/lang/ref/package-summary.html#reachability)
 
+## Play with the source
+
+To grab a copy of this code for yourself, please run the following commands in your workspace or directory of your choosing:
+```
+git clone https://github.com/wodencafe/GarbageDisposal
+cd GarbageDisposal
+./gradlew build
+```
+
 ## Built With
 
 * [Gradle](https://gradle.org/) - Dependency Management
