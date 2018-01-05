@@ -1,5 +1,5 @@
 
-package com.wodencafe.decorators;
+package club.wodencafe.decorators;
 
 import java.lang.ref.PhantomReference;
 import java.lang.ref.ReferenceQueue;

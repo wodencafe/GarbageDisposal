@@ -1,11 +1,12 @@
 
-package com.wodencafe.decorators;
+package club.wodencafe.decorators;
 
 import java.util.concurrent.TimeUnit;
 import org.junit.Test;
 
 import com.jayway.awaitility.Awaitility;
-import com.wodencafe.decorators.GarbageDisposal;
+
+import club.wodencafe.decorators.GarbageDisposal;
 
 public class GarbageDisposalTest
 {
