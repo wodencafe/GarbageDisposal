@@ -1,10 +1,12 @@
 # GarbageDisposal
 
-GarbageDisposal is a library to register callbacks when an object is Garbage Collected, without incurring the penalty for implementing the finalize method.
+**GarbageDisposal** is a library to register callbacks when an object is *Garbage Collected*, without incurring the penalty for implementing the *finalize* method.
+
+Please see [here](https://stackoverflow.com/questions/2860121/why-do-finalizers-have-a-severe-performance-penalty) for more details on why it is problematic to implement the *finalize* method directly.
 
 ## Getting Started
 
-This project is in the process of being hosted on Maven Central, when this is complete this artifact will be available and this section will be updated with the Maven coordinates.
+This project is in the process of being hosted on *Maven Central*, when this is complete this artifact will be available and this section will be updated with the Maven coordinates.
 
 ## Example of Use
 
