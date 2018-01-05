@@ -8,7 +8,16 @@ Please see [here](https://stackoverflow.com/questions/2860121/why-do-finalizers-
 
 This project is in the process of being hosted on [Maven Central](https://search.maven.org/), when this is complete this artifact will be available and this section will be updated with the *Maven Coordinates*. 
 
-For immediate usage, please see the **[Play with the source](#play-with-the-source)** section.
+If you would like to start using this library in your own project, please add the following to your build.gradle dependencies:
+
+```
+dependencies {
+    // https://jitpack.io/#wodencafe/GarbageDisposal
+    compile 'com.github.wodencafe:GarbageDisposal:master-SNAPSHOT'
+}
+```
+
+For customizing and plating with the source for yourself, please see the **[Play with the source](#play-with-the-source)** section.
 
 ## Example of Use
 
