@@ -19,7 +19,7 @@ This callback will be invoked when the JVM Garbage Collection cycle runs, and th
 
 ## Built With
 
-* [Maven](https://gradle.org/) - Dependency Management
+* [Gradle](https://gradle.org/) - Dependency Management
 
 ## License
 
