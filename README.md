@@ -38,4 +38,4 @@ You can then reference this jar yourself in your own projects.
 
 ## License
 
-This project is licensed under the **BSD-3 License** - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the [BSD-3 License](https://opensource.org/licenses/BSD-3-Clause) - see the [LICENSE.md](LICENSE.md) file for details
