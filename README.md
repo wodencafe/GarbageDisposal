@@ -6,7 +6,9 @@ Please see [here](https://stackoverflow.com/questions/2860121/why-do-finalizers-
 
 ## Getting Started
 
-This project is in the process of being hosted on [Maven Central](https://search.maven.org/), when this is complete this artifact will be available and this section will be updated with the Maven coordinates.
+This project is in the process of being hosted on [Maven Central](https://search.maven.org/), when this is complete this artifact will be available and this section will be updated with the *Maven Coordinates*. 
+
+For immediate usage, please see the **Play with the source** section.
 
 ## Example of Use
 
@@ -17,7 +19,7 @@ Object objectToWatch = new Object();
 GarbageDisposal.decorate(objectToWatch, () -> System.out.println("Object was Garbage Collected");
 ```
 
-This callback will be invoked when the JVM Garbage Collection cycle runs, and the object is [Phantom Reachable](https://docs.oracle.com/javase/7/docs/api/java/lang/ref/package-summary.html#reachability)
+This callback will be invoked when the [JVM Garbage Collection](https://www.dynatrace.com/resources/ebooks/javabook/how-garbage-collection-works/) cycle runs, and the object is [Phantom Reachable](https://docs.oracle.com/javase/7/docs/api/java/lang/ref/package-summary.html#reachability)
 
 ## Play with the source
 
