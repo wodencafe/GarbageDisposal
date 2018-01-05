@@ -19,4 +19,4 @@ This callback will be invoked when the JVM Garbage Collection cycle runs, and th
 
 ## License
 
-This project is licensed under the BSD-3 License - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the **BSD-3 License** - see the [LICENSE.md](LICENSE.md) file for details
