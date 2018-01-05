@@ -32,4 +32,10 @@ dependencies {
 	compile group: 'com.google.guava', name: 'guava', version: '23.6-jre'	
 }
 
-
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
+}
