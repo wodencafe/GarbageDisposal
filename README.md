@@ -46,7 +46,8 @@ You can then reference this jar for your own projects.
 
 ## Built With
 
-* [Gradle](https://gradle.org/) - Dependency Management
+* [Gradle](https://gradle.org/) - Dependency Management and Build Sytem
+* [JitPack.io](https://jitpack.io/#wodencafe/GarbageDisposal) - Easy to use package repository for Git
 
 ## License
 
