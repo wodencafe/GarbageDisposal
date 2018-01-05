@@ -12,7 +12,7 @@ For immediate usage, please see the **Play with the source** section.
 
 ## Example of Use
 
-The standard usage pattern of **GarbageDispoal** is to *decorate* an object and provide a **Runnable** callback, like so:
+The standard usage pattern of [GarbageDisposal.java] is to *decorate* an object and provide a **Runnable** callback, like so:
 
 ```
 Object objectToWatch = new Object();
