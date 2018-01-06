@@ -6,6 +6,23 @@ This library uses the [decorator pattern](https://en.wikipedia.org/wiki/Decorato
 
 Please see [here](https://stackoverflow.com/questions/2860121/why-do-finalizers-have-a-severe-performance-penalty) and [here](https://docs.oracle.com/javase/9/docs/api/java/lang/Object.html#finalize--) for more details on why it is problematic to implement the *finalize* method directly.
 
+## Usage Examples
+
+The standard usage pattern of [GarbageDisposal.java](src/main/java/club/wodencafe/decorators/GarbageDisposal.java) is to [decorate()](src/main/java/club/wodencafe/decorators/GarbageDisposal.java#L96) an object and provide a [Runnable](https://docs.oracle.com/javase/9/docs/api/java/lang/Runnable.html) callback:
+
+```
+Object objectToWatch = new Object();
+GarbageDisposal.decorate(objectToWatch, () -> System.out.println("Object was Garbage Collected");
+```
+
+This callback will be invoked when the [JVM Garbage Collection](https://www.dynatrace.com/resources/ebooks/javabook/how-garbage-collection-works/) cycle runs, and the object is [Phantom Reachable](https://docs.oracle.com/javase/7/docs/api/java/lang/ref/package-summary.html#reachability)
+
+If for some reason you later decide to remove the callback, you may [undecorate()](/src/main/java/club/wodencafe/decorators/GarbageDisposal.java#L91) the decorated object:
+
+```
+GarbageDisposal.undecorate(objectToWatch);
+```
+
 ## Getting Started
 
 This project is in the process of being hosted on [Maven Central](https://search.maven.org/), when this is complete this artifact will be available and this section will be updated with the *Maven Coordinates*. 
@@ -44,23 +61,6 @@ dependencies {
 ```
 
 For customizing and playing with the source for yourself, please see the **[Play with the source](#play-with-the-source)** section.
-
-## Usage Examples
-
-The standard usage pattern of [GarbageDisposal.java](src/main/java/club/wodencafe/decorators/GarbageDisposal.java) is to [decorate()](src/main/java/club/wodencafe/decorators/GarbageDisposal.java#L96) an object and provide a [Runnable](https://docs.oracle.com/javase/9/docs/api/java/lang/Runnable.html) callback:
-
-```
-Object objectToWatch = new Object();
-GarbageDisposal.decorate(objectToWatch, () -> System.out.println("Object was Garbage Collected");
-```
-
-This callback will be invoked when the [JVM Garbage Collection](https://www.dynatrace.com/resources/ebooks/javabook/how-garbage-collection-works/) cycle runs, and the object is [Phantom Reachable](https://docs.oracle.com/javase/7/docs/api/java/lang/ref/package-summary.html#reachability)
-
-If for some reason you later decide to remove the callback, you may [undecorate()](/src/main/java/club/wodencafe/decorators/GarbageDisposal.java#L91) the decorated object:
-
-```
-GarbageDisposal.undecorate(objectToWatch);
-```
 
 ## News
 ### 2018-01-05: 
