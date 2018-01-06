@@ -61,10 +61,12 @@ GarbageDisposal.undecorate(objectToWatch);
 ```
 
 ## News
-2018-01-05: Added support for [undecorate()](/src/main/java/club/wodencafe/decorators/GarbageDisposal.java#L91)
-            Added license explicitly to individual source files.
+2018-01-05: 
+    * Added support for [undecorate()](/src/main/java/club/wodencafe/decorators/GarbageDisposal.java#L91)
+    * Added license explicitly to individual source files.
             
-2018-01-04: GarbageDisposal GitHub Repository is created, initial commits.
+2018-01-04: 
+    * GarbageDisposal GitHub Repository is created, initial commits.
 
 
 ## Play with the source
