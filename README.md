@@ -1,4 +1,4 @@
-# GarbageDisposal ![GarbageDisposal](resources/recycle.png =48x48) 
+# GarbageDisposal ![GarbageDisposal](resources/recycle.png) 
 
 **GarbageDisposal** is a library for registering [callbacks](https://en.wikipedia.org/wiki/Callback_(computer_programming)) when one or more specified objects is [Garbage Collected](https://www.cubrid.org/blog/understanding-java-garbage-collection), without incurring the [penalty](http://thefinestartist.com/effective-java/07) for implementing the [finalize](https://docs.oracle.com/javase/9/docs/api/java/lang/Object.html#finalize--) method - which, by the way, is now [deprecated as of Java 9](https://www.infoq.com/news/2017/03/Java-Finalize-Deprecated).
 
