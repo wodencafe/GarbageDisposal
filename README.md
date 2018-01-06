@@ -12,6 +12,8 @@ Please see [here](https://stackoverflow.com/questions/2860121/why-do-finalizers-
 The standard usage pattern of [GarbageDisposal.java](src/main/java/club/wodencafe/decorators/GarbageDisposal.java) is to [decorate()](src/main/java/club/wodencafe/decorators/GarbageDisposal.java#L189) an object and provide a [Runnable](https://docs.oracle.com/javase/9/docs/api/java/lang/Runnable.html) callback:
 
 ```
+import club.wodencafe.decorators.GarbageDisposal;
+...
 Object objectToWatch = new Object();
 GarbageDisposal.decorate(objectToWatch, () -> System.out.println("Object was Garbage Collected");
 ```
