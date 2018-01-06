@@ -1,6 +1,8 @@
 # GarbageDisposal
 
-**GarbageDisposal** is a library to register [callbacks](https://en.wikipedia.org/wiki/Callback_(computer_programming)) when an object is [Garbage Collected](https://www.cubrid.org/blog/understanding-java-garbage-collection), without incurring the [penalty](http://thefinestartist.com/effective-java/07) for implementing the [finalize](https://docs.oracle.com/javase/9/docs/api/java/lang/Object.html#finalize--) method - which, by the way, is now [deprecated as of Java 9.](https://www.infoq.com/news/2017/03/Java-Finalize-Deprecated)
+**GarbageDisposal** is a library for registering [callbacks](https://en.wikipedia.org/wiki/Callback_(computer_programming)) when one or more specified objects is [Garbage Collected](https://www.cubrid.org/blog/understanding-java-garbage-collection), without incurring the [penalty](http://thefinestartist.com/effective-java/07) for implementing the [finalize](https://docs.oracle.com/javase/9/docs/api/java/lang/Object.html#finalize--) method - which, by the way, is now [deprecated as of Java 9.](https://www.infoq.com/news/2017/03/Java-Finalize-Deprecated).
+
+This library uses the [decorator pattern](https://en.wikipedia.org/wiki/Decorator_pattern) to *decorate* an object, wrapping the specified callback in a [PhantomReference](https://docs.oracle.com/javase/9/docs/api/java/lang/ref/PhantomReference.html), and invoking the callback in its own thread. Optionally, you may specify an [ExecutorService](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/ExecutorService.html) to be used for the invocation of the callback.
 
 Please see [here](https://stackoverflow.com/questions/2860121/why-do-finalizers-have-a-severe-performance-penalty) and [here](https://docs.oracle.com/javase/9/docs/api/java/lang/Object.html#finalize--) for more details on *why* it is problematic to implement the *finalize* method directly.
 
