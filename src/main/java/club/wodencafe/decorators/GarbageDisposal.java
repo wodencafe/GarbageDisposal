@@ -52,8 +52,8 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.util.concurrent.AbstractScheduledService;
 
 /**
- * <h1>GarbageDisposal
- * <h1>GarbageDisposal is a utility decorator class, designed to assist you with
+ * <h1>GarbageDisposal</h1>
+ * <strong>GarbageDisposal</strong> is a utility <i>decorator</i> class, designed to assist you with
  * performing actions when a target object is Garbage Collected.
  * <p>
  * <strong>Example:</strong>
