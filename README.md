@@ -67,7 +67,7 @@ GarbageDisposal.undecorate(objectToWatch);
             
 ### 2018-01-04: 
   * GarbageDisposal GitHub Repository is created, initial commits.
-
+  * Added initial support for hosting on [JitPack.io](https://jitpack.io/#wodencafe/GarbageDisposal).
 
 ## Play with the source
 
