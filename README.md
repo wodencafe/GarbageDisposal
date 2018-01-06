@@ -67,6 +67,12 @@ dependencies {
 For customizing and playing with the source for yourself, please see the **[Play with the source](#play-with-the-source)** section.
 
 ## News
+### 2018-01-06
+  * Version 0.3
+  * Better logging, better background service for dequeing PhantomReferences.
+  * Added additional decorator methods, utilizing CompletableFuture, and may be cancelled.
+  * Added several new tests to test the new decorator methods.
+  
 ### 2018-01-05:
   * Version 0.2
   * Added support for [undecorate()](/src/main/java/club/wodencafe/decorators/GarbageDisposal.java#L91).
