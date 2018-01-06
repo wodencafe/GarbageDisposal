@@ -87,8 +87,9 @@ You can then reference this jar for your own projects.
 
 * [Gradle](https://gradle.org/) - Dependency Management and Build Sytem
 * [JitPack.io](https://jitpack.io/#wodencafe/GarbageDisposal) - Easy to use package repository for Git
-* [JUnit](http://junit.org) **Unit Testing** The *de facto* unit testing framework for Java
-* [Awaitility](https://github.com/awaitility/awaitility) **Unit Testing** Awaitility is a small Java DSL for synchronizing asynchronous operations
+* [SLF4J](https://www.slf4j.org/) - A simple facade or abstraction for various logging frameworks
+* [JUnit](http://junit.org) (**Unit Testing**) - The *de facto* unit testing framework for Java
+* [Awaitility](https://github.com/awaitility/awaitility) (**Unit Testing**) - Awaitility is a small Java DSL for synchronizing asynchronous operations
 
 ## License
 
