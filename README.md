@@ -73,7 +73,7 @@ dependencies {
 }
 ```
 
-For customizing and playing with the source for yourself, please see the **[Play with the source](#play-with-the-source)** section.
+For customizing and playing with the source for yourself, please see the **[Grab the source](#grab-the-source)** section.
 
 ## News
 ### 2018-01-06:
@@ -92,7 +92,7 @@ For customizing and playing with the source for yourself, please see the **[Play
   * GarbageDisposal GitHub Repository is created, initial commits.
   * Added initial support for hosting on [JitPack.io](https://jitpack.io/#wodencafe/GarbageDisposal).
 
-## Play with the source
+## Grab the source
 
 To grab a copy of this code for yourself, please run the following commands in your workspace or a directory of your choosing:
 ```
