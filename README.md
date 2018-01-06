@@ -27,6 +27,13 @@ If for some reason you later decide to remove the callback, you may [undecorate(
 GarbageDisposal.undecorate(objectToWatch);
 ```
 
+You can also use the [CompletableFuture](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/CompletableFuture.html) decorator methods to get a *CompletableFuture* handle:
+```
+Object objectToWatch = new Object();
+GarbageDisposal.decorateAsync(objectToWatch).thenRunAsync(() -> System.out.println("Object was Garbage Collected"));
+```
+This *CompletableFuture* handle may be cancelled if you choose, which interally calls undecorate.
+
 ## Getting Started
 
 This project is in the process of being hosted on [Maven Central](https://search.maven.org/), when this is complete this artifact will be available and this section will be updated with the *Maven Coordinates*. 
