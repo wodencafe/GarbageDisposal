@@ -16,7 +16,7 @@ import club.wodencafe.decorators.GarbageDisposal;
 ...
 Object objectToWatch = new Object();
 GarbageDisposal.decorate(objectToWatch, () -> 
-    System.out.println("Object was Garbage Collected");
+    System.out.println("Object was Garbage Collected"));
 ```
 
 This callback will be invoked when the [JVM Garbage Collection](https://www.dynatrace.com/resources/ebooks/javabook/how-garbage-collection-works/) cycle runs, and the object is [Phantom Reachable].(https://docs.oracle.com/javase/7/docs/api/java/lang/ref/package-summary.html#reachability)
