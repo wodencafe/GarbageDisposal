@@ -46,10 +46,10 @@ dependencies {
 	// https://mvnrepository.com/artifact/com.jayway.awaitility/awaitility
 	testCompile group: 'com.jayway.awaitility', name: 'awaitility', version: '1.7.0'
 
-    // The production code uses the SLF4J logging API at compile time
-    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
+	// The production code uses the SLF4J logging API at compile time
+	compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
 
-    testCompile 'junit:junit:4.12'
+	testCompile 'junit:junit:4.12'
 
 	compile group: 'com.google.guava', name: 'guava', version: '23.6-jre'	
 }

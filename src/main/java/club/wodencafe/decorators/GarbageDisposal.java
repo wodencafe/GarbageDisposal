@@ -39,36 +39,84 @@ import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.util.concurrent.AbstractExecutionThreadService;
 
 /**
- * Utility decorator class to assist a developer with knowing when an object is
- * eligible for Garbage Collection.
+ * <h1>GarbageDisposal
+ * <h1>GarbageDisposal is a utility decorator class, designed to assist you with
+ * performing actions when a target object is Garbage Collected.
+ * <p>
+ * <strong>Example:</strong>
+ * <p>
  * 
+ * <pre>
+ * {@code
+ * Object objectToWatch = new Object();
+ * GarbageDisposal.decorate(objectToWatch, 
+ * () -> System.out.println("Object was Garbage Collected");
+ * }
+ * </pre>
  * 
- * @author Christopher Bryan Boyd
+ * This will print "Object was Garbage Collected" when the next <strong>Garbage
+ * Collection Cycle</strong> occurs.
+ * 
+ * @author Christopher Bryan Boyd <wdodencafe@gmail.com>
+ * @version 0.2
+ * @since 2018-01-05
+ * @see {@link java.lang.ref.PhantomReference}
  *
  */
-public class GarbageDisposal
+public final class GarbageDisposal
 {
 
+	// Singleton
 	private static final GarbageDisposal gc = new GarbageDisposal();
-	private static final ExecutorService cachedExecutor = Executors.newCachedThreadPool();
-	private final ReferenceQueue<Object> q;
 
+	// SLF4J Logger
+	private static final Logger logger = LoggerFactory.getLogger(GarbageDisposal.class);
+
+	// ExecutorService, defaults to a CachedExecutorService
+	private static ExecutorService cachedExecutor = null;
+
+	// Guava Cache for storing decorated objects and their callbacks
 	private static final Cache<Object, PhantomRunnable<Object>> cache = CacheBuilder.newBuilder().weakKeys().build();
 
+	// Reference Queue, populated with the callbacks of Garbage Collected
+	// objects
+	private final ReferenceQueue<Object> q = new ReferenceQueue<>();
+
+	// Single-threaded Guava service for dequeueing entities from the
+	// ReferenceQueue
 	private final GarbageCollectorCloser service;
 
 	private GarbageDisposal()
 	{
-
-		q = new ReferenceQueue<>();
 		service = new GarbageCollectorCloser();
 		service.startAsync();
+		Runtime.getRuntime().addShutdownHook(new Thread()
+		{
+
+			@Override
+			public void run()
+			{
+				try
+				{
+					service.stopAsync().awaitTerminated(10, TimeUnit.SECONDS);
+				}
+				catch (TimeoutException e)
+				{
+					logger.error("Timed out while shutting down GarbageCollectorCloser", e);
+				}
+			}
+		});
 	}
 
 	public static final GarbageDisposal getInstance()
@@ -88,14 +136,50 @@ public class GarbageDisposal
 
 	}
 
+	/**
+	 * If the specified <strong>Object</strong> is <i>decorated</i>, remove the
+	 * <i>decoration</i>.
+	 * 
+	 * @param object
+	 *            The <strong>Object</strong> to undecorate.
+	 */
 	public static final <T> void undecorate(T object)
 	{
 		cache.invalidate(object);
 	}
 
+	/**
+	 * When the specified <strong>Object</strong> is <i>Garbage Collected</i>,
+	 * run the specified {@link java.lang.Runnable} callback.
+	 * 
+	 * @param object
+	 *            The <strong>Object</strong> to decorate.
+	 * @param runnable
+	 *            The callback to run when the <strong>Object</strong> is
+	 *            <i>Garbage Collected</i>.
+	 */
 	public static final <T> void decorate(T object, Runnable runnable)
 	{
 		cache.put(object, new PhantomRunnable<>(object, runnable));
+	}
+
+	/**
+	 * When the specified <strong>Object</strong> is <i>Garbage Collected</i>,
+	 * run the specified {@link java.lang.Runnable} callback on the desired
+	 * {@link java.util.concurrent.ExecutorService}.
+	 * 
+	 * @param object
+	 *            The <strong>Object</strong> to decorate.
+	 * @param runnable
+	 *            The callback to run when the <strong>Object</strong> is
+	 *            <i>Garbage Collected</i>.
+	 * @param executorService
+	 *            The {@link java.util.concurrent.ExecutorService} to run the
+	 *            callback on.
+	 */
+	public static final <T> void decorate(T object, Runnable runnable, ExecutorService executorService)
+	{
+		cache.put(object, new PhantomRunnable<>(object, runnable, Optional.ofNullable(executorService)));
 	}
 
 	private static final class PhantomRunnable<T> extends PhantomReference<T> implements Runnable
@@ -119,13 +203,13 @@ public class GarbageDisposal
 		{
 			super(referent, gc.q);
 			this.runnable = runnable;
-			this.executor = Optional.of(executor.orElse(cachedExecutor));
+			this.executor = Optional.of(executor.orElse(getCachcedExecutor()));
 		}
 
 		@Override
 		public void run()
 		{
-			// Not Necessary if the keys are weak.
+			// Probably Not Necessary if the keys are weak.
 			/*
 			 * Optional<Object> object =
 			 * cache.asMap().entrySet().stream().filter(x -> x.getValue() ==
@@ -135,5 +219,32 @@ public class GarbageDisposal
 			CompletableFuture.runAsync(() -> runnable.run(), executor.get());
 		}
 
+	}
+
+	private static final ExecutorService getCachcedExecutor()
+	{
+		if (cachedExecutor == null)
+		{
+			cachedExecutor = Executors.newCachedThreadPool();
+			Runtime.getRuntime().addShutdownHook(new Thread()
+			{
+
+				@Override
+				public void run()
+				{
+					try
+					{
+						cachedExecutor.shutdown();
+						cachedExecutor.awaitTermination(10, TimeUnit.SECONDS);
+					}
+					catch (InterruptedException e)
+					{
+						logger.error("Interrupted while shutting down the ExecutorService", e);
+					}
+				}
+			});
+
+		}
+		return cachedExecutor;
 	}
 }
