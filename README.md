@@ -64,11 +64,13 @@ dependencies {
 For customizing and playing with the source for yourself, please see the **[Play with the source](#play-with-the-source)** section.
 
 ## News
-### 2018-01-05: 
+### 2018-01-05:
+  * Version 0.2
   * Added support for [undecorate()](/src/main/java/club/wodencafe/decorators/GarbageDisposal.java#L91).
   * Added license explicitly to individual source files.
             
 ### 2018-01-04: 
+  * Version 0.1
   * GarbageDisposal GitHub Repository is created, initial commits.
   * Added initial support for hosting on [JitPack.io](https://jitpack.io/#wodencafe/GarbageDisposal).
 
