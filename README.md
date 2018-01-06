@@ -18,7 +18,7 @@ Object objectToWatch = new Object();
 GarbageDisposal.decorate(objectToWatch, () -> System.out.println("Object was Garbage Collected");
 ```
 
-This callback will be invoked when the [JVM Garbage Collection](https://www.dynatrace.com/resources/ebooks/javabook/how-garbage-collection-works/) cycle runs, and the object is [Phantom Reachable](https://docs.oracle.com/javase/7/docs/api/java/lang/ref/package-summary.html#reachability)
+This callback will be invoked when the [JVM Garbage Collection](https://www.dynatrace.com/resources/ebooks/javabook/how-garbage-collection-works/) cycle runs, and the object is [Phantom Reachable].(https://docs.oracle.com/javase/7/docs/api/java/lang/ref/package-summary.html#reachability)
 
 If for some reason you later decide to remove the callback, you may [undecorate()](/src/main/java/club/wodencafe/decorators/GarbageDisposal.java#L164
 ) the decorated object:
@@ -67,7 +67,7 @@ dependencies {
 For customizing and playing with the source for yourself, please see the **[Play with the source](#play-with-the-source)** section.
 
 ## News
-### 2018-01-06
+### 2018-01-06:
   * Version 0.3
   * Better logging, better background service for dequeing PhantomReferences.
   * Added additional decorator methods, utilizing CompletableFuture, and may be cancelled.
