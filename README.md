@@ -43,7 +43,7 @@ dependencies {
 
 For customizing and playing with the source for yourself, please see the **[Play with the source](#play-with-the-source)** section.
 
-## Example of Use
+## Usage Examples
 
 The standard usage pattern of [GarbageDisposal.java](src/main/java/club/wodencafe/decorators/GarbageDisposal.java) is to [decorate()](src/main/java/club/wodencafe/decorators/GarbageDisposal.java#L96) an object and provide a [Runnable](https://docs.oracle.com/javase/9/docs/api/java/lang/Runnable.html) callback:
 
