@@ -1,14 +1,47 @@
 # GarbageDisposal
 
-**GarbageDisposal** is a library to register [callbacks](https://en.wikipedia.org/wiki/Callback_(computer_programming)) when an object is [Garbage Collected](https://www.cubrid.org/blog/understanding-java-garbage-collection), without incurring the [penalty](http://thefinestartist.com/effective-java/07) for implementing the [finalize](https://docs.oracle.com/javase/9/docs/api/java/lang/Object.html#finalize--) method. Also *finalize* is now **deprecated**.
+**GarbageDisposal** is a library to register [callbacks](https://en.wikipedia.org/wiki/Callback_(computer_programming)) when an object is [Garbage Collected](https://www.cubrid.org/blog/understanding-java-garbage-collection), without incurring the [penalty](http://thefinestartist.com/effective-java/07) for implementing the [finalize](https://docs.oracle.com/javase/9/docs/api/java/lang/Object.html#finalize--) method - which, by the way, is now [deprecated as of Java 9.](https://www.infoq.com/news/2017/03/Java-Finalize-Deprecated)
 
-Please see [here](https://stackoverflow.com/questions/2860121/why-do-finalizers-have-a-severe-performance-penalty) and [here](https://docs.oracle.com/javase/9/docs/api/java/lang/Object.html#finalize--) for more details on why it is problematic to implement the *finalize* method directly.
+Please see [here](https://stackoverflow.com/questions/2860121/why-do-finalizers-have-a-severe-performance-penalty) and [here](https://docs.oracle.com/javase/9/docs/api/java/lang/Object.html#finalize--) for more details on *why* it is problematic to implement the *finalize* method directly.
 
 ## Getting Started
 
 This project is in the process of being hosted on [Maven Central](https://search.maven.org/), when this is complete this artifact will be available and this section will be updated with the *Maven Coordinates*. 
 
-For immediate usage, please see the **[Play with the source](#play-with-the-source)** section.
+### Maven
+If you would like to start using this library in your [Maven](https://maven.apache.org/) projects, please add the following to your **pom.xml**:
+```
+<repositories>
+    <repository>
+        <id>jitpack.io</id>
+        <url>https://jitpack.io</url>
+    </repository>
+</repositories>
+```
+```
+<!-- https://jitpack.io/#wodencafe/GarbageDisposal -->
+<dependency>
+    <groupId>com.github.wodencafe</groupId>
+    <artifactId>GarbageDisposal</artifactId>
+    <version>master-SNAPSHOT</version>
+</dependency>
+```
+
+### Gradle
+If you would like to start using this library in your [Gradle](https://gradle.org/) projects, please add the following to your **build.gradle**:
+```
+repositories {
+    maven { url "https://jitpack.io" }
+}
+```
+```
+dependencies {
+    // https://jitpack.io/#wodencafe/GarbageDisposal
+    compile 'com.github.wodencafe:GarbageDisposal:master-SNAPSHOT'
+}
+```
+
+For customizing and playing with the source for yourself, please see the **[Play with the source](#play-with-the-source)** section.
 
 ## Example of Use
 
@@ -37,8 +70,12 @@ You can then reference this jar for your own projects.
 
 ## Built With
 
-* [Gradle](https://gradle.org/) - Dependency Management
+* [Gradle](https://gradle.org/) - Dependency Management and Build Sytem
+* [JitPack.io](https://jitpack.io/#wodencafe/GarbageDisposal) - Easy to use package repository for Git
 
 ## License
 
 This project is licensed under the [BSD-3 License](https://opensource.org/licenses/BSD-3-Clause) - see the [LICENSE.md](LICENSE.md) file for details
+
+## Further Reading
+You can find more information about the deprecation of *Object.finalize()* [here](https://stuartmarks.wordpress.com/2017/04/17/deprecation-of-object-finalize/).
