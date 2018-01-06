@@ -33,7 +33,11 @@
 
 package club.wodencafe.decorators;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+
+import org.junit.Before;
 import org.junit.Test;
 
 import com.jayway.awaitility.Awaitility;
@@ -44,17 +48,149 @@ public class GarbageDisposalTest
 {
 
 	private boolean consumed = false;
+	private int identityHashCode = -1;
+
+	@Before
+	public void before()
+	{
+		consumed = false;
+		identityHashCode = -1;
+	}
 
 	@Test
-	public void test() throws InterruptedException
+	public void testRegular() throws InterruptedException
 	{
 		garbage();
 		System.gc();
 		Awaitility.await().atMost(5, TimeUnit.SECONDS).until(() -> consumed);
 	}
 
+	@Test
+	public void testHashCode() throws InterruptedException
+	{
+		int identityHashCode = garbageHash();
+		System.gc();
+		Awaitility.await().atMost(5, TimeUnit.SECONDS).until(() -> this.identityHashCode == identityHashCode);
+	}
+
+	@Test
+	public void testHashCodeWithExecutorService() throws InterruptedException
+	{
+		ExecutorService executor = Executors.newSingleThreadExecutor();
+		int identityHashCode = garbageHashExecutor(executor);
+		System.gc();
+		Awaitility.await().atMost(5, TimeUnit.SECONDS).until(() -> this.identityHashCode == identityHashCode);
+	}
+
+	@Test
+	public void testWithExecutorService() throws InterruptedException
+	{
+		ExecutorService executor = Executors.newSingleThreadExecutor();
+		garbageExecutor(executor);
+		System.gc();
+		Awaitility.await().atMost(5, TimeUnit.SECONDS).until(() -> consumed);
+	}
+
+	@Test
+	public void testCompletableFuture()
+	{
+		garbageFuture();
+		System.gc();
+		Awaitility.await().atMost(5, TimeUnit.SECONDS).until(() -> consumed);
+
+	}
+
+	@Test
+	public void testCompletableFutureWithExecutorService()
+	{
+		ExecutorService executor = Executors.newSingleThreadExecutor();
+		garbageFutureExecutor(executor);
+		System.gc();
+		Awaitility.await().atMost(5, TimeUnit.SECONDS).until(() -> consumed);
+
+	}
+
+	@Test
+	public void testCompletableFutureHashCode()
+	{
+		int identityHashCode = garbageFutureHash();
+		System.gc();
+		Awaitility.await().atMost(5, TimeUnit.SECONDS).until(() -> this.identityHashCode == identityHashCode);
+
+	}
+
+	@Test
+	public void testCompletableFutureHashCodeWithExecutorService()
+	{
+		ExecutorService executor = Executors.newSingleThreadExecutor();
+		int identityHashCode = garbageFutureHashExecutor(executor);
+		System.gc();
+		Awaitility.await().atMost(5, TimeUnit.SECONDS).until(() -> this.identityHashCode == identityHashCode);
+
+	}
+
+	private void garbageFuture()
+	{
+		GarbageDisposal.decorateAsync(new Object()).thenRunAsync(() ->
+		{
+			consumed = true;
+		});
+	}
+
+	private void garbageFutureExecutor(ExecutorService service)
+	{
+		GarbageDisposal.decorateAsync(new Object(), service).thenRunAsync(() ->
+		{
+			consumed = true;
+		});
+	}
+
+	private int garbageFutureHash()
+	{
+		Object o = new Object();
+		int identityHashCode = System.identityHashCode(o);
+		GarbageDisposal.decorateAsync(new Object()).thenRunAsync(() ->
+		{
+			this.identityHashCode = identityHashCode;
+		});
+		return identityHashCode;
+	}
+
+	private int garbageFutureHashExecutor(ExecutorService service)
+	{
+		Object o = new Object();
+		int identityHashCode = System.identityHashCode(o);
+		GarbageDisposal.decorateAsync(new Object(), service).thenRunAsync(() ->
+		{
+			this.identityHashCode = identityHashCode;
+		});
+		return identityHashCode;
+	}
+
+	private int garbageHash()
+	{
+		Object o = new Object();
+		int identityHashCode = System.identityHashCode(o);
+		GarbageDisposal.decorate(o, () -> this.identityHashCode = identityHashCode);
+		return identityHashCode;
+	}
+
+	private int garbageHashExecutor(ExecutorService service)
+	{
+		Object o = new Object();
+		int identityHashCode = System.identityHashCode(o);
+		GarbageDisposal.decorate(o, () -> this.identityHashCode = identityHashCode, service);
+		return identityHashCode;
+	}
+
 	private void garbage()
 	{
 		GarbageDisposal.decorate(new Object(), () -> consumed = true);
+	}
+
+	private void garbageExecutor(ExecutorService service)
+	{
+
+		GarbageDisposal.decorate(new Object(), () -> consumed = true, service);
 	}
 }

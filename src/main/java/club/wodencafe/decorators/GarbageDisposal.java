@@ -42,13 +42,14 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import java.util.function.Consumer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import com.google.common.util.concurrent.AbstractExecutionThreadService;
+import com.google.common.util.concurrent.AbstractScheduledService;
 
 /**
  * <h1>GarbageDisposal
@@ -78,11 +79,11 @@ import com.google.common.util.concurrent.AbstractExecutionThreadService;
 public final class GarbageDisposal
 {
 
-	// Singleton
-	private static final GarbageDisposal gc = new GarbageDisposal();
-
 	// SLF4J Logger
 	private static final Logger logger = LoggerFactory.getLogger(GarbageDisposal.class);
+
+	// Singleton
+	private static final GarbageDisposal gc = new GarbageDisposal();
 
 	// ExecutorService, defaults to a CachedExecutorService
 	private static ExecutorService cachedExecutor = null;
@@ -133,23 +134,37 @@ public final class GarbageDisposal
 		return gc;
 	}
 
-	private static final class GarbageCollectorCloser extends AbstractExecutionThreadService
+	private static final class GarbageCollectorCloser extends AbstractScheduledService
 	{
 
 		@Override
-		protected void run() throws Exception
+		protected void runOneIteration() throws Exception
 		{
 			try
 			{
-				PhantomRunnable<?> g = (PhantomRunnable<?>) gc.q.remove();
-				logger.debug("GarbageCollectorCloser dequeued PhantomRunnable<?> "
-						+ String.valueOf(System.identityHashCode(g)));
-				g.run();
+				PhantomRunnable<?> g = (PhantomRunnable<?>) gc.q.poll();
+				while (g != null)
+				{
+
+					logger.debug("GarbageCollectorCloser dequeued PhantomRunnable<?> "
+							+ String.valueOf(System.identityHashCode(g)));
+					g.run();
+					g = (PhantomRunnable<?>) gc.q.poll();
+				}
+				logger.debug("GarbageCollectorCloser no more PhantomRunnable<?> entries to dequeue. "
+						+ System.lineSeparator() + "Checking again in 100 ms.");
+
 			}
 			catch (Throwable th)
 			{
 				logger.error("Unexpected exception while running GarbageCollectorCloser.", th);
 			}
+		}
+
+		@Override
+		protected Scheduler scheduler()
+		{
+			return Scheduler.newFixedDelaySchedule(100, 100, TimeUnit.MILLISECONDS);
 		}
 
 	}
@@ -161,7 +176,7 @@ public final class GarbageDisposal
 	 * @param object
 	 *            The <strong>Object</strong> to undecorate.
 	 */
-	public static final <T> void undecorate(T object)
+	public static final <T> void undecorate(final T object)
 	{
 		Objects.requireNonNull(object, "Cannot undecorate a null object.");
 		if (Objects.nonNull(cache.getIfPresent(object)))
@@ -186,17 +201,9 @@ public final class GarbageDisposal
 	 *            The callback to run when the <strong>Object</strong> is
 	 *            <i>Garbage Collected</i>.
 	 */
-	public static final <T> void decorate(T object, Runnable runnable)
+	public static final <T> void decorate(final T object, final Runnable runnable)
 	{
-		Objects.requireNonNull(object, "Cannot decorate a null object.");
-		Objects.requireNonNull(runnable, "Cannot call a null callback, did you intend to call undecorate?");
-		if (Objects.nonNull(cache.getIfPresent(object)))
-		{
-			logger.warn("Object " + String.valueOf(System.identityHashCode(object))
-					+ " is already decorated, existing decoration will be replaced.");
-		}
-		cache.put(object, new PhantomRunnable<>(object, runnable));
-		logger.debug("Object " + String.valueOf(System.identityHashCode(object)) + " has been decorated.");
+		decorate(object, runnable, null);
 	}
 
 	/**
@@ -213,7 +220,8 @@ public final class GarbageDisposal
 	 *            The {@link java.util.concurrent.ExecutorService} to run the
 	 *            callback on.
 	 */
-	public static final <T> void decorate(T object, Runnable runnable, ExecutorService executorService)
+	public static final <T> void decorate(final T object, final Runnable runnable,
+			final ExecutorService executorService)
 	{
 		Objects.requireNonNull(object, "Cannot decorate a null object.");
 		Objects.requireNonNull(runnable, "Cannot call a null callback, did you intend to call undecorate?");
@@ -231,6 +239,45 @@ public final class GarbageDisposal
 		logger.debug("Object " + String.valueOf(System.identityHashCode(object)) + " has been decorated.");
 	}
 
+	public static final <T> CompletableFuture<Void> decorateAsync(final T object)
+	{
+		final CompletableFuture<Void> cf = new CompletableFuture<>();
+		decorate(object, () -> cf.complete(null));
+		return cf;
+	}
+
+	public static final <T> CompletableFuture<Void> decorateAsync(final T object, ExecutorService executorService)
+	{
+		final CompletableFuture<Void> cf = new CompletableFuture<>();
+		decorate(object, () -> cf.complete(null), executorService);
+		return cf;
+	}
+
+	public static final <T> CompletableFuture<Integer> decorateAsyncWithHash(final T object)
+	{
+		return decorateAsyncWithHash(object, null);
+	}
+
+	public static final <T> CompletableFuture<Integer> decorateAsyncWithHash(final T object,
+			ExecutorService executorService)
+	{
+		final CompletableFuture<Integer> cf = new CompletableFuture<>();
+		decorateWithHash(object, (c) -> cf.complete(c), executorService);
+		return cf;
+	}
+
+	public static final <T> void decorateWithHash(final T object, final Consumer<Integer> consumer)
+	{
+		decorateWithHash(object, consumer, null);
+	}
+
+	public static final <T> void decorateWithHash(final T object, final Consumer<Integer> consumer,
+			final ExecutorService executorService)
+	{
+		final Integer identityHashCode = System.identityHashCode(object);
+		decorate(object, () -> consumer.accept(identityHashCode), executorService);
+	}
+
 	private static final class PhantomRunnable<T> extends PhantomReference<T> implements Runnable
 	{
 
@@ -238,16 +285,9 @@ public final class GarbageDisposal
 
 		private final Optional<ExecutorService> executor;
 
-		public PhantomRunnable(T referent,
-				Runnable runnable)
-
-		{
-			this(referent, runnable, Optional.empty());
-		}
-
-		public PhantomRunnable(T referent,
-				Runnable runnable,
-				Optional<ExecutorService> executor)
+		public PhantomRunnable(final T referent,
+				final Runnable runnable,
+				final Optional<ExecutorService> executor)
 
 		{
 			super(referent, gc.q);
@@ -283,7 +323,6 @@ public final class GarbageDisposal
 				{
 					try
 					{
-
 						logger.debug("Default ExecutorService is shutting down, waiting up "
 								+ "to 10 seconds for running tasks to terminate.", cachedExecutor);
 						cachedExecutor.shutdown();
