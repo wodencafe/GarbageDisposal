@@ -35,6 +35,7 @@ package club.wodencafe.decorators;
 
 import java.lang.ref.PhantomReference;
 import java.lang.ref.ReferenceQueue;
+import java.lang.ref.WeakReference;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
@@ -52,9 +53,9 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.util.concurrent.AbstractScheduledService;
 
 /**
- * <h1>GarbageDisposal</h1>
- * <strong>GarbageDisposal</strong> is a utility <i>decorator</i> class, designed to assist you with
- * performing actions when a target object is Garbage Collected.
+ * <h1>GarbageDisposal</h1> <strong>GarbageDisposal</strong> is a utility
+ * <i>decorator</i> class, designed to assist you with performing actions when a
+ * target object is Garbage Collected.
  * <p>
  * <strong>Example:</strong>
  * <p>
@@ -143,7 +144,7 @@ public final class GarbageDisposal
 			try
 			{
 				PhantomRunnable<?> g = (PhantomRunnable<?>) gc.q.poll();
-				while (g != null)
+				while (Objects.nonNull(g))
 				{
 
 					logger.debug("GarbageCollectorCloser dequeued PhantomRunnable<?> "
@@ -241,15 +242,39 @@ public final class GarbageDisposal
 
 	public static final <T> CompletableFuture<Void> decorateAsync(final T object)
 	{
-		final CompletableFuture<Void> cf = new CompletableFuture<>();
-		decorate(object, () -> cf.complete(null));
-		return cf;
+		return decorateAsync(object, null);
 	}
 
 	public static final <T> CompletableFuture<Void> decorateAsync(final T object, ExecutorService executorService)
 	{
-		final CompletableFuture<Void> cf = new CompletableFuture<>();
-		decorate(object, () -> cf.complete(null), executorService);
+		WeakReference<T> ref = new WeakReference<T>(object);
+		final CompletableFuture<Void> cf = new CompletableFuture<Void>()
+		{
+
+			@Override
+			public boolean cancel(boolean mayInterruptIfRunning)
+			{
+				Object obj = ref.get();
+				if (Objects.nonNull(obj))
+				{
+					logger.debug("CompletableFuture has been cancelled, undecorating object "
+							+ System.identityHashCode(obj));
+					undecorate(obj);
+				}
+				else
+				{
+					logger.warn("CompletableFuture has been cancelled, but object has already been Garbage Collected.");
+				}
+				return super.cancel(mayInterruptIfRunning);
+			}
+		};
+		decorate(object, () ->
+		{
+			if (!cf.isCancelled())
+				cf.complete(null);
+			else
+				logger.warn("CompletableFuture is cancelled, not running callback.");
+		}, executorService);
 		return cf;
 	}
 
@@ -261,8 +286,35 @@ public final class GarbageDisposal
 	public static final <T> CompletableFuture<Integer> decorateAsyncWithHash(final T object,
 			ExecutorService executorService)
 	{
-		final CompletableFuture<Integer> cf = new CompletableFuture<>();
-		decorateWithHash(object, (c) -> cf.complete(c), executorService);
+
+		WeakReference<T> ref = new WeakReference<T>(object);
+		final CompletableFuture<Integer> cf = new CompletableFuture<Integer>()
+		{
+
+			@Override
+			public boolean cancel(boolean mayInterruptIfRunning)
+			{
+				Object obj = ref.get();
+				if (Objects.nonNull(obj))
+				{
+					logger.debug("CompletableFuture has been cancelled, undecorating object "
+							+ System.identityHashCode(obj));
+					undecorate(obj);
+				}
+				else
+				{
+					logger.warn("CompletableFuture has been cancelled, but object has already been Garbage Collected.");
+				}
+				return super.cancel(mayInterruptIfRunning);
+			}
+		};
+		decorateWithHash(object, (c) ->
+		{
+			if (!cf.isCancelled())
+				cf.complete(c);
+			else
+				logger.warn("CompletableFuture is cancelled, not running callback.");
+		}, executorService);
 		return cf;
 	}
 
@@ -305,7 +357,10 @@ public final class GarbageDisposal
 			 * this).map(x -> x.getKey()).findAny(); if (object.isPresent()) {
 			 * gc.set.remove(this); }
 			 */
-			CompletableFuture.runAsync(() -> runnable.run(), executor.get());
+			if (!executor.get().isShutdown())
+				CompletableFuture.runAsync(() -> runnable.run(), executor.get());
+			else
+				logger.warn("ExecutorService has been shut down, not running callback.", executor.get());
 		}
 
 	}

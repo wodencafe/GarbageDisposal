@@ -33,6 +33,9 @@
 
 package club.wodencafe.decorators;
 
+import static org.junit.Assert.assertFalse;
+import java.lang.ref.WeakReference;
+import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -129,30 +132,55 @@ public class GarbageDisposalTest
 
 	}
 
+	@Test
+	public void testUndecorate()
+	{
+		WeakReference<Object> ref = garbageUndecorate();
+		System.gc();
+		Awaitility.await().atMost(5, TimeUnit.SECONDS).until(() -> Objects.isNull(ref.get()));
+		assertFalse(consumed);
+	}
+
+	@Test
+	public void testCompletableFutureCancel()
+	{
+		WeakReference<Object> ref = garbageUndecorate();
+		garbageFutureCancel();
+		System.gc();
+		Awaitility.await().atMost(5, TimeUnit.SECONDS).until(() -> Objects.isNull(ref.get()));
+		assertFalse(consumed);
+	}
+
+	private WeakReference<Object> garbageFutureCancel()
+	{
+		Object o = new Object();
+		GarbageDisposal.decorateAsync(o).thenRunAsync(() -> consumed = true).cancel(true);
+		return new WeakReference<>(o);
+	}
+
+	private WeakReference<Object> garbageUndecorate()
+	{
+		Object o = new Object();
+		GarbageDisposal.decorate(o, () -> consumed = true);
+		GarbageDisposal.undecorate(o);
+		return new WeakReference<>(o);
+	}
+
 	private void garbageFuture()
 	{
-		GarbageDisposal.decorateAsync(new Object()).thenRunAsync(() ->
-		{
-			consumed = true;
-		});
+		GarbageDisposal.decorateAsync(new Object()).thenRunAsync(() -> consumed = true);
 	}
 
 	private void garbageFutureExecutor(ExecutorService service)
 	{
-		GarbageDisposal.decorateAsync(new Object(), service).thenRunAsync(() ->
-		{
-			consumed = true;
-		});
+		GarbageDisposal.decorateAsync(new Object(), service).thenRunAsync(() -> consumed = true);
 	}
 
 	private int garbageFutureHash()
 	{
 		Object o = new Object();
 		int identityHashCode = System.identityHashCode(o);
-		GarbageDisposal.decorateAsync(new Object()).thenRunAsync(() ->
-		{
-			this.identityHashCode = identityHashCode;
-		});
+		GarbageDisposal.decorateAsync(o).thenRunAsync(() -> this.identityHashCode = identityHashCode);
 		return identityHashCode;
 	}
 
@@ -160,10 +188,7 @@ public class GarbageDisposalTest
 	{
 		Object o = new Object();
 		int identityHashCode = System.identityHashCode(o);
-		GarbageDisposal.decorateAsync(new Object(), service).thenRunAsync(() ->
-		{
-			this.identityHashCode = identityHashCode;
-		});
+		GarbageDisposal.decorateAsync(o, service).thenRunAsync(() -> this.identityHashCode = identityHashCode);
 		return identityHashCode;
 	}
 
