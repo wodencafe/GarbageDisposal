@@ -60,6 +60,12 @@ If for some reason you later decide to remove the callback, you may [undecorate(
 GarbageDisposal.undecorate(objectToWatch);
 ```
 
+## News
+2018-01-05: Added support for [undecorate()](/src/main/java/club/wodencafe/decorators/GarbageDisposal.java#L91)
+            Added explicit license to individual files.
+2018-01-04: GarbageDisposal GitHub Repository is created, initial commits.
+
+
 ## Play with the source
 
 To grab a copy of this code for yourself, please run the following commands in your workspace or directory of your choosing:
