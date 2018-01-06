@@ -1,6 +1,7 @@
 # GarbageDisposal ![GarbageDisposal](resources/recycle.png) 
 
-**GarbageDisposal** is a library for registering [callbacks](https://en.wikipedia.org/wiki/Callback_(computer_programming)) when one or more specified objects is [Garbage Collected](https://www.cubrid.org/blog/understanding-java-garbage-collection), without incurring the [penalty](http://thefinestartist.com/effective-java/07) for implementing the [finalize](https://docs.oracle.com/javase/9/docs/api/java/lang/Object.html#finalize--) method - which, by the way, is now [deprecated as of Java 9](https://www.infoq.com/news/2017/03/Java-Finalize-Deprecated).
+**GarbageDisposal** is a library for registering [callbacks](https://en.wikipedia.org/wiki/Callback_(computer_programming)) when one or more specific objects are [Garbage Collected](https://www.cubrid.org/blog/understanding-java-garbage-collection), without incurring the [penalty](http://thefinestartist.com/effective-java/07) for implementing the [finalize](https://docs.oracle.com/javase/9/docs/api/java/lang/Object.html#finalize--) method. 
+Usage of *finalize* is [discouraged](https://softwareengineering.stackexchange.com/questions/288715/is-overriding-object-finalize-really-bad), and now [deprecated as of Java 9](https://www.infoq.com/news/2017/03/Java-Finalize-Deprecated).
 
 This library uses the [decorator pattern](https://en.wikipedia.org/wiki/Decorator_pattern) to *decorate* an object, wrapping the specified callback in a [PhantomReference](https://docs.oracle.com/javase/9/docs/api/java/lang/ref/PhantomReference.html), and invoking the callback in its own thread. Optionally, you may specify an [ExecutorService](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/ExecutorService.html) to be used for the invocation of the callback.
 
@@ -76,7 +77,7 @@ For customizing and playing with the source for yourself, please see the **[Play
 
 ## Play with the source
 
-To grab a copy of this code for yourself, please run the following commands in your workspace or directory of your choosing:
+To grab a copy of this code for yourself, please run the following commands in your workspace or a directory of your choosing:
 ```
 git clone https://github.com/wodencafe/GarbageDisposal
 cd GarbageDisposal
@@ -90,7 +91,7 @@ You can then reference this jar for your own projects.
 
 ## Built With
 
-* [Gradle](https://gradle.org/) - Dependency Management and Build Sytem.
+* [Gradle](https://gradle.org/) - Dependency Management and Build System.
 * [JitPack.io](https://jitpack.io/#wodencafe/GarbageDisposal) - Easy to use package repository for Git.
 * [Guava](https://github.com/google/guava) - A useful a set of core libraries for Java, developed by Google.
 * [SLF4J](https://www.slf4j.org/) - A simple facade or abstraction for various logging frameworks.
