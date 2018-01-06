@@ -4,7 +4,7 @@
 
 This library uses the [decorator pattern](https://en.wikipedia.org/wiki/Decorator_pattern) to *decorate* an object, wrapping the specified callback in a [PhantomReference](https://docs.oracle.com/javase/9/docs/api/java/lang/ref/PhantomReference.html), and invoking the callback in its own thread. Optionally, you may specify an [ExecutorService](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/ExecutorService.html) to be used for the invocation of the callback.
 
-Please see [here](https://stackoverflow.com/questions/2860121/why-do-finalizers-have-a-severe-performance-penalty) and [here](https://docs.oracle.com/javase/9/docs/api/java/lang/Object.html#finalize--) for more details on *why* it is problematic to implement the *finalize* method directly.
+Please see [here](https://stackoverflow.com/questions/2860121/why-do-finalizers-have-a-severe-performance-penalty) and [here](https://docs.oracle.com/javase/9/docs/api/java/lang/Object.html#finalize--) for more details on why it is problematic to implement the *finalize* method directly.
 
 ## Getting Started
 
