@@ -85,11 +85,12 @@ You can then reference this jar for your own projects.
 
 ## Built With
 
-* [Gradle](https://gradle.org/) - Dependency Management and Build Sytem
-* [JitPack.io](https://jitpack.io/#wodencafe/GarbageDisposal) - Easy to use package repository for Git
-* [SLF4J](https://www.slf4j.org/) - A simple facade or abstraction for various logging frameworks
-* [JUnit](http://junit.org) (**Unit Testing**) - The *de facto* unit testing framework for Java
-* [Awaitility](https://github.com/awaitility/awaitility) (**Unit Testing**) - Awaitility is a small Java DSL for synchronizing asynchronous operations
+* [Gradle](https://gradle.org/) - Dependency Management and Build Sytem.
+* [JitPack.io](https://jitpack.io/#wodencafe/GarbageDisposal) - Easy to use package repository for Git.
+* [Guava](https://github.com/google/guava) - A useful a set of core libraries for Java, developed by Google.
+* [SLF4J](https://www.slf4j.org/) - A simple facade or abstraction for various logging frameworks.
+* [JUnit](http://junit.org) (**Unit Testing**) - The *de facto* unit testing framework for Java.
+* [Awaitility](https://github.com/awaitility/awaitility) (**Unit Testing**) - A small Java DSL for synchronizing asynchronous operations.
 
 ## License
 
