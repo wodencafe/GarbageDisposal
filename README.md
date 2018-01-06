@@ -34,7 +34,7 @@ Object objectToWatch = new Object();
 GarbageDisposal.decorateAsync(objectToWatch).thenRunAsync(
     () -> System.out.println("Object was Garbage Collected"));
 ```
-This *CompletableFuture* handle may be cancelled if you choose, which interally calls undecorate.
+This *CompletableFuture* handle may be [cancelled](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/CompletableFuture.html#cancel-boolean-) if you choose, which will internally call undecorate.
 
 ## Getting Started
 
