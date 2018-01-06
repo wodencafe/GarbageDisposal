@@ -45,7 +45,7 @@ For customizing and playing with the source for yourself, please see the **[Play
 
 ## Example of Use
 
-The standard usage pattern of [GarbageDisposal.java](src/main/java/club/wodencafe/decorators/GarbageDisposal.java) is to [decorate()](src/main/java/club/wodencafe/decorators/GarbageDisposal.java#L57) an object and provide a [Runnable](https://docs.oracle.com/javase/9/docs/api/java/lang/Runnable.html) callback, like so:
+The standard usage pattern of [GarbageDisposal.java](src/main/java/club/wodencafe/decorators/GarbageDisposal.java) is to [decorate()](src/main/java/club/wodencafe/decorators/GarbageDisposal.java#L96) an object and provide a [Runnable](https://docs.oracle.com/javase/9/docs/api/java/lang/Runnable.html) callback:
 
 ```
 Object objectToWatch = new Object();
@@ -53,6 +53,12 @@ GarbageDisposal.decorate(objectToWatch, () -> System.out.println("Object was Gar
 ```
 
 This callback will be invoked when the [JVM Garbage Collection](https://www.dynatrace.com/resources/ebooks/javabook/how-garbage-collection-works/) cycle runs, and the object is [Phantom Reachable](https://docs.oracle.com/javase/7/docs/api/java/lang/ref/package-summary.html#reachability)
+
+If you later decide that the callback is no longer necessary, you may [undecorate()](/src/main/java/club/wodencafe/decorators/GarbageDisposal.java#L91) the decorated object:
+
+```
+GarbageDisposal.undecorate(objectToWatch);
+```
 
 ## Play with the source
 
