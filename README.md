@@ -19,7 +19,7 @@ GarbageDisposal.decorate(objectToWatch, () ->
     System.out.println("Object is eligible for Garbage Collection"));
 ```
 
-This callback will be invoked when the [JVM Garbage Collection](https://www.dynatrace.com/resources/ebooks/javabook/how-garbage-collection-works/) cycle runs, and the object is [Phantom Reachable].(https://docs.oracle.com/javase/7/docs/api/java/lang/ref/package-summary.html#reachability)
+This callback will be invoked when the [JVM Garbage Collection](https://www.dynatrace.com/resources/ebooks/javabook/how-garbage-collection-works/) cycle runs, and the object is [Phantom Reachable](https://docs.oracle.com/javase/7/docs/api/java/lang/ref/package-summary.html#reachability).
 
 If for some reason you later decide to remove the callback, you may [undecorate()](/src/main/java/club/wodencafe/decorators/GarbageDisposal.java#L164
 ) the decorated object:
