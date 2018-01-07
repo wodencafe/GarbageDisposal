@@ -55,6 +55,7 @@ import com.google.common.util.concurrent.AbstractScheduledService;
 /**
  * <h1>GarbageDisposal</h1> 
  * <strong>GarbageDisposal</strong> is a utility
+ * <strong>GarbageDisposal</strong> is a utility
  * <i>decorator</i> class, designed to assist you with performing actions when a
  * target object is Garbage Collected.
  * <p>

@@ -1,6 +1,6 @@
 # GarbageDisposal ![GarbageDisposal](resources/recycle.png) 
 
-**GarbageDisposal** is a library for registering [callbacks](https://en.wikipedia.org/wiki/Callback_(computer_programming)) when one or more specific objects are [Garbage Collected](https://www.cubrid.org/blog/understanding-java-garbage-collection), without incurring the [penalty](http://thefinestartist.com/effective-java/07) for implementing the [finalize](https://docs.oracle.com/javase/9/docs/api/java/lang/Object.html#finalize--) method. 
+**GarbageDisposal** is a Java library for registering [callbacks](https://en.wikipedia.org/wiki/Callback_(computer_programming)) when one or more specific objects are [Garbage Collected](https://www.cubrid.org/blog/understanding-java-garbage-collection), without incurring the [penalty](http://thefinestartist.com/effective-java/07) for implementing the [finalize](https://docs.oracle.com/javase/9/docs/api/java/lang/Object.html#finalize--) method. 
 Usage of *finalize* is [discouraged](https://softwareengineering.stackexchange.com/questions/288715/is-overriding-object-finalize-really-bad), and now [deprecated as of Java 9](https://www.infoq.com/news/2017/03/Java-Finalize-Deprecated).
 
 This library uses the [decorator pattern](https://en.wikipedia.org/wiki/Decorator_pattern) to *decorate* an object, wrapping the specified callback in a [PhantomReference](https://docs.oracle.com/javase/9/docs/api/java/lang/ref/PhantomReference.html), and invoking the callback in its own thread. Optionally, you may specify an [ExecutorService](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/ExecutorService.html) to be used for the invocation of the callback.
@@ -15,10 +15,11 @@ The standard usage pattern of [GarbageDisposal.java](src/main/java/club/wodencaf
 import club.wodencafe.decorators.GarbageDisposal;
 ...
 Object objectToWatch = new Object();
-GarbageDisposal.decorate(objectToWatch, () -> System.out.println("Object was Garbage Collected");
+GarbageDisposal.decorate(objectToWatch, () -> 
+    System.out.println("Object is eligible for Garbage Collection"));
 ```
 
-This callback will be invoked when the [JVM Garbage Collection](https://www.dynatrace.com/resources/ebooks/javabook/how-garbage-collection-works/) cycle runs, and the object is [Phantom Reachable](https://docs.oracle.com/javase/7/docs/api/java/lang/ref/package-summary.html#reachability)
+This callback will be invoked when the [JVM Garbage Collection](https://www.dynatrace.com/resources/ebooks/javabook/how-garbage-collection-works/) cycle runs, and the object is [Phantom Reachable](https://docs.oracle.com/javase/7/docs/api/java/lang/ref/package-summary.html#reachability).
 
 If for some reason you later decide to remove the callback, you may [undecorate()](/src/main/java/club/wodencafe/decorators/GarbageDisposal.java#L164
 ) the decorated object:
@@ -26,6 +27,14 @@ If for some reason you later decide to remove the callback, you may [undecorate(
 ```
 GarbageDisposal.undecorate(objectToWatch);
 ```
+
+You can also use the [CompletableFuture](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/CompletableFuture.html) decorator methods to get a *CompletableFuture* handle:
+```
+Object objectToWatch = new Object();
+GarbageDisposal.decorateAsync(objectToWatch).thenRunAsync(
+    () -> System.out.println("Object is eligible for Garbage Collection"));
+```
+This *CompletableFuture* handle may be [cancelled](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/CompletableFuture.html#cancel-boolean-) if you choose, which will internally call undecorate.
 
 ## Getting Started
 
@@ -64,9 +73,15 @@ dependencies {
 }
 ```
 
-For customizing and playing with the source for yourself, please see the **[Play with the source](#play-with-the-source)** section.
+For customizing and playing with the source for yourself, please see the **[Grab the source](#grab-the-source)** section.
 
 ## News
+### 2018-01-06:
+  * Version 0.3
+  * Better logging, better background service for dequeing PhantomReferences.
+  * Added additional decorator methods, utilizing CompletableFuture, and may be cancelled.
+  * Added several new tests to test the new decorator methods.
+  
 ### 2018-01-05:
   * Version 0.2
   * Added support for [undecorate()](/src/main/java/club/wodencafe/decorators/GarbageDisposal.java#L91).
@@ -77,7 +92,7 @@ For customizing and playing with the source for yourself, please see the **[Play
   * GarbageDisposal GitHub Repository is created, initial commits.
   * Added initial support for hosting on [JitPack.io](https://jitpack.io/#wodencafe/GarbageDisposal).
 
-## Play with the source
+## Grab the source
 
 To grab a copy of this code for yourself, please run the following commands in your workspace or a directory of your choosing:
 ```
