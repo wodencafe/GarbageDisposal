@@ -53,7 +53,8 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.util.concurrent.AbstractScheduledService;
 
 /**
- * <h1>GarbageDisposal</h1> <strong>GarbageDisposal</strong> is a utility
+ * <h1>GarbageDisposal</h1> 
+ * <strong>GarbageDisposal</strong> is a utility
  * <i>decorator</i> class, designed to assist you with performing actions when a
  * target object is Garbage Collected.
  * <p>
@@ -71,7 +72,7 @@ import com.google.common.util.concurrent.AbstractScheduledService;
  * This will print "Object was Garbage Collected" when the next <strong>Garbage
  * Collection Cycle</strong> occurs.
  * 
- * @author Christopher Bryan Boyd <wdodencafe@gmail.com>
+ * @author Christopher Bryan Boyd <wodencafe@gmail.com>
  * @version 0.2
  * @since 2018-01-05
  * @see {@link java.lang.ref.PhantomReference}
