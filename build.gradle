@@ -38,9 +38,13 @@ apply plugin: 'maven-publish'
 group = 'club.wodencafe'
 version = '0.3-SNAPSHOT'
 
-repositories {
-    jcenter()
+allprojects {
+    repositories {
+        jcenter()
+        maven { url "https://jitpack.io" }
+    }
 }
+
 
 dependencies {
 	// https://mvnrepository.com/artifact/com.jayway.awaitility/awaitility
